@@ -11,8 +11,30 @@ namespace BlackJack
         }
     }
     /**
-     * A hand will consist of 2 to many cards. Each BlackJack player will be dealt one hand.
-    */
+     * Each deck will contain 52 cards.
+     */
+    class Deck
+    {
+        int[] cards;
+        public Hand()
+        {
+            //TODO init the deck of cards array.
+        }
+
+        private int[] initDeckOfCards()
+        {
+            //52 cards in a deck
+            int[] cards = new int[52];
+            //TODO populate array for deck of cards. This will represent the project's "GRID BASED" game.
+            //Hint:  A black jack face cards will use a value of 10.
+            //Hint:  Ace is a value of 1 or 11.  Lets assign it initial value of 11.  Dealer will need to reassign value to 1 when appropriate.
+
+            return 
+        }
+    }
+        /**
+         * A hand will consist of 2 to many cards. Each BlackJack player will be dealt one hand.
+        */
     class Hand
     {
         int[] cards;
@@ -48,6 +70,11 @@ namespace BlackJack
             return new BlackJackGame();
         }
 
+        public static BlackJackGame Deal(BlackJackGame game)
+        {
+
+            return game;
+        }
         public static Boolean IsWinner(Hand hand)
         {
             return false;
