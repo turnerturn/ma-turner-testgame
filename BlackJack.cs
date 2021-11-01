@@ -5,38 +5,54 @@ namespace BlackJack
 
     class Program
     {
-  
+
         static void Main(string[] args)
         {
+
+
             BlackJackGame game = StartNewGame();
-            Console.WriteLine("New Game started");
+            Console.WriteLine("New game started");
 
-            //TODO while loop until player says they do not want another card.
-            //TODO Inside while loop, prompt if you want to add another card to your hand.  If no, break out of loop.
-
-            while (game.DoesConputerNeedAnotherCard())
+            while (true)
             {
+                Console.WriteLine("Your hand has " + game.GetMyTotalPoints()+ " points.");
+                Console.WriteLine("Computer's hand has " + game.GetComputersTotalPoints() + " points.");
+
+                // Type your username and press enter
+                Console.WriteLine("Do you want to add another card to your hand? (yes or no)");
+
+                // Create a string variable and get user input from the keyboard and store it in the variable
+                string input = Console.ReadLine();
+                if (input.Equals("no"))
+                {
+                    break;
+                }
+                else
+                {
+                    game.AddNextCardToMyHand();
+                }
+            }
+            while (game.DoesComputerNeedAnotherCard())
+            {
+                Console.WriteLine("Computers hand has " + game.GetComputersTotalPoints() + " points.  Computer's hand requires another card.");
                 game.AddNextCardToComputerHand();
             }
 
-            if (game.AmITheWinner)
+            if (game.AmITheWinner())
             {
-                //TODO Console.WriteLine and Present yourself as the winner.
+                Console.WriteLine("You win");
             }
             else
             {
-                //TODO Console.WriteLine and Present computer as the winner.
+                Console.WriteLine("You lose");
             }
 
         }
 
 
-        public BlackJackGame StartNewGame()
+        public static BlackJackGame StartNewGame()
         {
             BlackJackGame game = new BlackJackGame();
-            int[] deckOfCards = game.GetDeckOfCards();
-            nextCardIndex = 0;
-
             //Next card to be delt to me.
             game.AddNextCardToMyHand();
 
@@ -75,7 +91,14 @@ namespace BlackJack
             //Shuffle deck of cards by sorting int array in random order.
             ShuffleDeckOfCards();
         }
-
+        public int GetMyTotalPoints()
+        {
+            return GetSumOfCards(this.myCards);
+        }
+        public int GetComputersTotalPoints()
+        {
+            return GetSumOfCards(this.computerCards);
+        }
         private int[] CreateDeckOfCards()
         {
             //52 cards in a deck
@@ -135,12 +158,12 @@ namespace BlackJack
             else
             {
                 //Increase array size by one for the next card
-                tempCards = new int[this.cards.Length + 1];
+                tempCards = new int[this.computerCards.Length + 1];
 
                 //Populate temp cards array with original cards
-                for (int i = 0; i < this.cards.Length; i++)
+                for (int i = 0; i < this.computerCards.Length; i++)
                 {
-                    tempCards[i] = this.cards[i];
+                    tempCards[i] = this.computerCards[i];
                 }
             }
             //Assign new card value to last index of array
@@ -163,12 +186,12 @@ namespace BlackJack
             else
             {
                 //Increase array size by one for the next card
-                tempCards = new int[this.cards.Length + 1];
+                tempCards = new int[this.myCards.Length + 1];
 
                 //Populate temp cards array with original cards
-                for (int i = 0; i < this.cards.Length; i++)
+                for (int i = 0; i < this.myCards.Length; i++)
                 {
-                    tempCards[i] = this.cards[i];
+                    tempCards[i] = this.deckOfCards[i];
                 }
             }
             //Assign new card value to last index of array
@@ -179,7 +202,8 @@ namespace BlackJack
 
         public Boolean IsComputerTheWinner()
         {
-            if (IsBust(myCards)) {
+            if (IsBust(myCards))
+            {
                 //Computer always wins when I have to many points.
                 return true;
             }
@@ -187,7 +211,7 @@ namespace BlackJack
              * Computer wins if they do not have too many points 
              * and if their cards sum total is greater than or equal to my cards some total.
              */
-            else if(!IsBust(computerCards) && GetSumOfCards(computerCards) >= GetSumOfCards(myCards))
+            else if (!IsBust(computerCards) && GetSumOfCards(computerCards) >= GetSumOfCards(myCards))
             {
                 return true;
             }
@@ -198,12 +222,13 @@ namespace BlackJack
 
         public Boolean AmITheWinner()
         {
-            if (IsComputerTheWinner(myCards, computerCards))
+            if (IsComputerTheWinner())
             {
                 //I am not the winner when the computer wins
                 return false;
             }
-            else {
+            else
+            {
                 //I am the winner when the computer does not win.
                 return true;
             }
@@ -217,7 +242,7 @@ namespace BlackJack
             }
             return false;
         }
-        public Boolean DoesConputerNeedAnotherCard()
+        public Boolean DoesComputerNeedAnotherCard()
         {
             //total sum of points. return true if sum is < 16.
             //Computer always needs another card if their sum is less than 16
@@ -230,7 +255,7 @@ namespace BlackJack
         private int GetSumOfCards(int[] cards)
         {
             int total = 0;
-            for (int = 0; i < cards.Length; int++)
+            for (int i= 0; i < cards.Length; i++)
             {
                 total = total + cards[i];
             }
@@ -247,7 +272,7 @@ namespace BlackJack
             // For each spot in the array, picka random item to swap into that spot.
             for (int i = 0; i < this.deckOfCards.Length - 1; i++)
             {
-                int j = rand.Next(i, cards.Length);
+                int j = rand.Next(i, deckOfCards.Length);
                 //We need temp value to store current value at index i.
                 int temp = deckOfCards[i];
                 //Replace value at index i with value from index j.
@@ -255,13 +280,11 @@ namespace BlackJack
                 //Replace value at index j with value that was stored at index i.
                 deckOfCards[j] = temp;
             }
-
-            return deckOfCards;
         }
 
         public int[] GetDeckOfCards()
         {
-            return this.deckOfCards
+            return this.deckOfCards;
         }
     }
 
